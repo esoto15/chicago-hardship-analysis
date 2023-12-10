@@ -1,6 +1,4 @@
-# Elizabeth Soto -  Final Project - December,4 2023
-# Important-running python main.py will show various graphs, and the results for the metrics of each algorithm used,
-# however, you'd hve to xlose the graphs for the results to completely print out
+# Elizabeth Soto
 
 import pandas as pd
 import numpy as np
@@ -13,10 +11,14 @@ from sklearn import linear_model
 from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.cluster import AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.ensemble import RandomForestRegressor
 # metrics
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
+#
+import shap
+shap.initjs()
 
 
 def main():
@@ -27,7 +29,7 @@ def main():
     print('Dataset Name: Census Data Selected socioeconomic indicators in Chicago 2008-2012')
     print('Initial dataset shape: ', df.shape)
     print('Initial column names: ', df.columns.tolist())
-
+    ignored_columns = ['COMMUNITY AREA NAME', 'PERCENT OF HOUSING CROWDED', 'PERCENT AGED UNDER 18 OR OVER 64', 'PER CAPITA INCOME ']
     # dependent(X) and target variables(y)
     X = df[['PERCENT AGED 16+ UNEMPLOYED', 'PERCENT AGED 25+ WITHOUT HIGH SCHOOL DIPLOMA',
             'PERCENT HOUSEHOLDS BELOW POVERTY']]  # .95
@@ -50,6 +52,8 @@ def main():
     print('Linear Regression')
     print(result_df.head(6).to_string(index=False))
     print('Performance Measurements')
+    mse1 = mean_squared_error(y_test, predictions)
+    print(f"Mean Squared Error: {mse1}")
     # performance measurement
     r2 = r2_score(y_test, predictions)
     print(f'R-squared: {r2}')
@@ -99,7 +103,6 @@ def main():
     axes[2].legend()
     axes[2].text(0.01, -0.20, 'Figure 1.3', transform=axes[2].transAxes, fontsize=12)
     plt.tight_layout()
-
     plt.show()
 
     # ----2.training Decision Tree Regressor model----
@@ -160,6 +163,45 @@ def main():
     final['Cluster'] = np.array(clusters)
     print(final.to_string(index=False))
     # final.to_csv('cluster_data.csv', index=False)
+    # Save original X_test and y_test to a DataFrame
+    test_data = pd.DataFrame(X_test, columns=X_test.columns)
+    test_data['HARDSHIP INDEX'] = y_test.values.flatten()
+
+    # Add cluster assignments to the DataFrame
+    test_data['Cluster'] = clusters
+
+    # Add back the ignored columns with their corresponding data
+    for col in ignored_columns:
+        test_data[col] = df[col]
+
+    # Save the DataFrame to a CSV file
+    test_data.to_csv('test_data_with_clusters_and_ignored_columns.csv', index=False)
+
+    # random forest regressor
+    rand_model = RandomForestRegressor(n_estimators=100, random_state=42)
+    rand_model.fit(X_train, y_train)
+    predictions = rand_model.predict(X_test)
+    print("Random forest Regressor")
+    # performance measurement
+    mse = mean_squared_error(y_test, predictions)
+    print(f"Mean Squared Error: {mse}")
+
+    mae = mean_absolute_error(y_test, predictions)
+    print(f'Mean Absolute Error: {mae}')
+
+    r22 = r2_score(y_test, predictions)
+    print(f"R-squared: {r22}")
+
+    actual3 = np.array(y_test)
+    pred3 = np.array(predictions)
+    rmse3 = np.sqrt(np.mean((actual3 - pred3) ** 2))
+    print('RMSE: ', rmse3)
+
+    # SHAP
+    explainer = shap.Explainer(rand_model)
+    shap_values = explainer(X_test)
+    # waterfall plot
+    shap.plots.waterfall(shap_values[1])
 
 
 if __name__ == "__main__":
