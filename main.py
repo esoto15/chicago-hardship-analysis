@@ -103,8 +103,9 @@ def main():
     axes[2].legend()
     axes[2].text(0.01, -0.20, 'Figure 1.3', transform=axes[2].transAxes, fontsize=12)
     plt.tight_layout()
+    plt.savefig('images/linear_reg_scatter_plot.png')
     plt.show()
-
+    plt.close()
     # ----2.training Decision Tree Regressor model----
 
     dt_regressor = DecisionTreeRegressor(max_depth=3)
@@ -123,13 +124,10 @@ def main():
     # performance measurement
     mse = mean_squared_error(y_test, predictions2)
     print(f"Mean Squared Error: {mse}")
-
     mae = mean_absolute_error(y_test, predictions2)
     print(f'Mean Absolute Error: {mae}')
-
     r2 = r2_score(y_test, predictions2)
     print(f"R-squared: {r2}")
-
     pred2 = np.array(predictions2)
     rmse_2 = np.sqrt(np.mean((actual - pred2) ** 2))
     print('RMSE: ', rmse_2)
@@ -138,7 +136,9 @@ def main():
     decision_tree = plt.figure(figsize=(23, 10))
     plot_tree(dt_regressor, feature_names=X.columns.tolist(), filled=True, rounded=True, fontsize=12)
     decision_tree.set_facecolor('#fff')
+    plt.savefig('images/decision_tree_regressor.png')
     plt.show()
+    plt.close()
 
     # ---3. Clustering: Agglomerative Clustering
 
@@ -152,7 +152,9 @@ def main():
     plt.ylabel('Euclidean Distance', fontsize=14)
     cutting_height = 60
     plt.axhline(y=cutting_height, color='gray', linestyle='--')
+    plt.savefig('images/dendrogram.png')
     plt.show()
+    plt.close()
 
     model = AgglomerativeClustering(n_clusters=2, linkage='ward', metric='euclidean')
     clusters = model.fit_predict(X_test)
@@ -161,7 +163,7 @@ def main():
     final = X_test.copy()
     final['Hardship Index'] = y_test
     final['Cluster'] = np.array(clusters)
-    print(final.to_string(index=False))
+    print(final.head(3).to_string(index=False))
     # final.to_csv('cluster_data.csv', index=False)
     # Save original X_test and y_test to a DataFrame
     test_data = pd.DataFrame(X_test, columns=X_test.columns)
@@ -182,26 +184,34 @@ def main():
     rand_model.fit(X_train, y_train)
     predictions = rand_model.predict(X_test)
     print("Random forest Regressor")
-    # performance measurement
+
+    # performance measurements
     mse = mean_squared_error(y_test, predictions)
     print(f"Mean Squared Error: {mse}")
-
     mae = mean_absolute_error(y_test, predictions)
     print(f'Mean Absolute Error: {mae}')
-
     r22 = r2_score(y_test, predictions)
     print(f"R-squared: {r22}")
-
     actual3 = np.array(y_test)
     pred3 = np.array(predictions)
     rmse3 = np.sqrt(np.mean((actual3 - pred3) ** 2))
     print('RMSE: ', rmse3)
 
-    # SHAP
+    # SHAP Values
     explainer = shap.Explainer(rand_model)
     shap_values = explainer(X_test)
+    print(shap_values.shape)
     # waterfall plot
-    shap.plots.waterfall(shap_values[1])
+    shap.plots.waterfall(shap_values[23])
+    plt.show()
+
+    # tree plot summary
+    shap.summary_plot(shap_values, X_test)
+    plt.show()
+
+    # bar plot
+    shap.plots.bar(shap_values)
+    plt.show()
 
 
 if __name__ == "__main__":
