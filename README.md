@@ -34,13 +34,16 @@ The results from our cluster analysis showed that the first cluster consisted pr
 
 ## SHAP Analysis: Interpreting Model Predictions
 This section delves into the SHAP (SHapley Additive exPlanations) analysis, offering insights into how individual features contribute to the predictions made by our models. SHAP values provide a unified measure of feature importance, helping us understand the impact of each variable on the model's output.
+![Waterfall SHAP Plot](images/Figure_2.png)
+![Waterfall SHAP Plot](images/Figure_3.png)
+
+
 ### Visualizations
 - Scatter plots for linear regression.
 - Decision tree plot.
 - Dendrogram for agglomerative clustering.
 
 ### Data
-- Initial dataset: [Census Data - Chicago 2008-2012](link_to_dataset.csv)
-- Clustered data: [Clustered Data](clustereddata.csv)
+- Initial dataset: [Census Data - Chicago 2008-2012]([link_to_dataset.csv](https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2)https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2)
 
 **Note:** Close generated graphs to see complete results in the terminal.
