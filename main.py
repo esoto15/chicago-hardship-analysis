@@ -19,6 +19,9 @@ from sklearn.metrics import r2_score
 #
 import shap
 shap.initjs()
+# deploy model Azure
+import joblib
+
 
 
 def main():
@@ -42,6 +45,7 @@ def main():
     reg = linear_model.LinearRegression()
     reg.fit(X_train, y_train)
     predictions = reg.predict(X_test)
+    # print results
     result_df = pd.DataFrame({
         'Actual': y_test.values.flatten(),
         'Predicted': predictions
@@ -64,7 +68,8 @@ def main():
     pred = np.array(predictions)
     rmse = np.sqrt(np.mean((actual - pred) ** 2))
     print('RMSE: ', rmse)
-
+    # save the model
+    joblib.dump(reg, 'linear_regression_model.joblib')
     # Visualizations
 
     # 3 Features Selected
