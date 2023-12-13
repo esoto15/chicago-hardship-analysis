@@ -33,14 +33,24 @@ In examining census data from Chicago communities from 2008-2012, we uncovered a
 The results from our cluster analysis showed that the first cluster consisted primarily of a high number of communities that were experiencing unemployment, living below poverty, and had a high hardship index. While the second cluster consisted of communities that experienced less of those challenges. To improve the metrics we would like to work with larger datasets and more specific attributes, this would help us narrow down the issues that impact hardship in communities. It would also be a great opportunity to work with datasets from different cities and compare with the results gathered in this study.
 
 ## SHAP Analysis: Interpreting Model Predictions
-This section delves into the SHAP (SHapley Additive exPlanations) analysis, offering insights into how individual features contribute to the predictions made by our models. SHAP values provide a unified measure of feature importance, helping us understand the impact of each variable on the model's output.
+This section delves into SHAP (SHapley Additive exPlanations) analysis, uncovering how individual features impact our models' predictions. SHAP values serve as a unified measure of feature importance.
+<br>
+<br>
+In the figure below, three crucial attributes—Percent aged 25+ without a high school diploma, percent aged 16+ unemployed, and percent of households below the poverty line—are ordered by importance. The x-axis represents SHAP values, with red indicating high values and blue indicating low values. Each point on the graph represents a data row.
+<br>
+<br>
+The subsequent SHAP summary reveals a balanced distribution of data points for 'Percent aged 25+ without a high school diploma.' Lower points negatively affect the output, while higher points have a positive impact, enhancing our understanding of feature-value dynamics.
+![Waterfall SHAP Plot](images/Figure_2.png)
+
+![Waterfall SHAP Plot](images/Figure_3.png)
+
+
 ### Visualizations
 - Scatter plots for linear regression.
 - Decision tree plot.
 - Dendrogram for agglomerative clustering.
 
 ### Data
-- Initial dataset: [Census Data - Chicago 2008-2012](link_to_dataset.csv)
-- Clustered data: [Clustered Data](clustereddata.csv)
+- Initial dataset: [Census Data - Chicago 2008-2012]([link_to_dataset.csv](https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2)https://data.cityofchicago.org/Health-Human-Services/Census-Data-Selected-socioeconomic-indicators-in-C/kn9c-c2s2)
 
 **Note:** Close generated graphs to see complete results in the terminal.
